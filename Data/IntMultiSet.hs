@@ -3,7 +3,7 @@
 {-# OPTIONS_GHC -fno-warn-amp #-}
 #endif
 #if __GLASGOW_HASKELL__
-{-# LANGUAGE DeriveDataTypeable, StandaloneDeriving #-}
+{-# LANGUAGE DeriveDataTypeable, OverloadedLists, StandaloneDeriving, TypeFamilies #-}
 #endif
 -----------------------------------------------------------------------------
 -- |
@@ -157,6 +157,7 @@ import Data.Typeable
 #if __GLASGOW_HASKELL__
 import Text.Read
 import Data.Data (Data(..), mkNoRepType)
+import qualified GHC.Exts as Exts
 #endif
 
 {--------------------------------------------------------------------
@@ -679,6 +680,16 @@ instance Read IntMultiSet where
 #if __GLASGOW_HASKELL__ < 800
 #include "Typeable.h"
 INSTANCE_TYPEABLE0(IntMultiSet,intMultiSetTc,"IntMultiSet")
+#endif
+
+{--------------------------------------------------------------------
+  IsList
+--------------------------------------------------------------------}
+#if __GLASGOW_HASKELL__
+instance Exts.IsList (IntMultiSet) where
+  type Item IntMultiSet = Int
+  fromList = fromList
+  toList = toList
 #endif
 
 {--------------------------------------------------------------------
